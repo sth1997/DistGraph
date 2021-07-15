@@ -30,6 +30,7 @@
 #include <utils.hpp>
 #include <cstring>
 #include <mpi.h>
+#include <cstdio>
 
 namespace types {
 
@@ -182,7 +183,7 @@ std::ofstream &Graph::write_local_adjp(std::ofstream &os)
  */
 std::istream &Graph::read_adj(std::istream &is)
 {
-  char line[1024];
+  char line[102400];
   std::vector<std::string> result;
 
   clear();
@@ -197,13 +198,15 @@ std::istream &Graph::read_adj(std::istream &is)
   } else {
     num_vertices = atoi(result[0].c_str());
     num_edges = atoi(result[1].c_str());
+    printf("num_vertices = %d  num_edges = %d\n", num_vertices, num_edges);
   }
 
 
   vertex_id = 0;
   while(true) {
     pos = is.tellg();
-    if(!is.getline(line, 1024)) {
+    //if(!is.getline(line, 1024)) {
+    if(!is.getline(line, 1024000)) {
       break;
     }
     result.clear();
